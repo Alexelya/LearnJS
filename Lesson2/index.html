@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our first JS code</title>
+
+    <link rel="stylesheet" href="main.css" />
+    <link
+      href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      .wrapper {
+        position: relative;
+        background-color: #d9d9d9;
+        text-align: center;
+      }
+      .left-top {
+        position: absolute;
+        z-index: 1;
+        color: #fff;
+        top: 100px;
+        left: 18px;
+      }
+      .left-bottom {
+        position: absolute;
+        z-index: 2;
+        color: #fff;
+        top: 770px;
+        left: 1%;
+      }
+      .right-top {
+        position: absolute;
+        z-index: 4;
+        color: #fff;
+        top: 100px;
+        left: 1135px;
+      }
+      .right-bottom {
+        position: absolute;
+        z-index: 3;
+        color: #fff;
+        top: 770px;
+        left: 1115px;
+      }
+      .centered {
+        position: absolute;
+        z-index: 5;
+        color: #fff;
+        top: 70%;
+        left: 40%;
+      }
+    </style>
+  </head>
+  <body onload="clockTimer();">
+    <h1>This is timer!</h1>
+    <span id="clock"></span>
+
+    <script src="app.js"></script>
+
+    <div id="wrapper">
+      <div class="left-top"><i class="icon-long-arrow-left"></i></div>
+      <div class="left-bottom">Left-bottom</div>
+      <div class="right-top">Right-top</div>
+      <div class="right-bottom">Right-bottom</div>
+      <div class="centered">Centered</div>
+      <img
+        src="https://funart.pro/uploads/posts/2021-03/thumbs/1617040139_35-p-oboi-gora-ararat-37.jpg
+      "
+        alt=""
+      />
+    </div>
+  </body>
+</html>
