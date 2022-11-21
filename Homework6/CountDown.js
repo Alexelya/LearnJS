@@ -61,3 +61,5 @@ new Promise(function (resolve, reject) {
       resolve(0);
     });
   });
+  
+/* Исправить итеративно!!!!*/

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+
+        <div class="container">
+    
+            <div class="profile">
+    
+                <div class="profile-image">
+    
+                    <img src="" alt="" id="userAvatar" style="width: 152px; aspect-ratio: 1; border: 2px solid gray;">
+    
+                </div>
+    
+                <div class="profile-user-settings">
+    
+                    <h1 class="profile-user-name" id="username"></h1>
+    
+                    <button class="btn profile-edit-btn" id="edit">Edit Profile</button>
+                    <button class="btn profile-edit-btn" id="_posts">Edit posts</button>
+                    <button class="btn profile-edit-btn" id="logout">Log out</button>
+                    <button class="btn profile-edit-btn" id="delete" style="border-color: red; color: red;">Delete account</button>
+                    <button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+    
+                </div>
+    
+                <div class="profile-stats">
+    
+                    <ul>
+                        <li><span class="profile-stat-count">164</span> posts</li>
+                        <li><span class="profile-stat-count">188</span> followers</li>
+                        <li><span class="profile-stat-count">206</span> following</li>
+                    </ul>
+    
+                </div>
+    
+                <div class="profile-bio">
+                    <span class="profile-real-name" id="fullname"></span>
+                    <span id="userBio"></span>
+    
+                </div>
+    
+            </div>
+            <!-- End of profile section -->
+    
+        </div>
+        <!-- End of container -->
+    
+    </header>
+    
+    <main>
+    
+        <div class="container">
+    
+            <div class="gallery" id="items">
+    
+                
+               
+    
+                
+    
+                
+    
+            </div>
+            <!-- End of gallery -->
+    
+            <div class="loader"></div>
+    
+        </div>
+        <!-- End of container -->
+    
+    </main>
+    <script src="requests.js"></script>
+    <script src="helpers.js"></script>
+    <script>
+        /*
+
+Full-page view:
+
+https://codepen.io/GeorgePark/full/VXrwOP/
+
+*/
+let _headers = {
+            "Content-type" : "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "User-Agent" : "telran",
+            "ngrok-skip-browser-warning": "69420",
+            "x-access-token" : localStorage.getItem("token")
+};
+let url = "http://65.109.13.139:9191";
+const posts = document.querySelectorAll('.gallery-item');
+
+posts.forEach(post => {
+	post.addEventListener('click', () => {
+		//Get original image URL
+		const imgUrl = post.firstElementChild.src.split("?")[0];
+		//Open image in new tab
+		window.open(imgUrl, '_blank');
+	});
+});
+document.getElementById("logout").addEventListener("click", function () 
+{
+    try {
+        new Promise((resolve, reject) => {
+            resolve();
+        }).then(function(){
+            return logOut();
+        }).then(function() {
+            location.href = 'login.html';
+        })
+    } catch (error) {
+        location.href = '404.html';
+    }
+});
+document.getElementById("delete").addEventListener("click", function () 
+{
+    try {
+        new Promise((resolve, reject) => {
+            resolve();
+        }).then(function(){
+            return deleteAccount();
+        }).then(function() {
+            location.href = 'login.html';
+        })
+    } catch (error) {
+        location.href = '404.html';
+    }
+});
+document.getElementById("edit").addEventListener("click", function () 
+{
+    try {
+        newInfo();
+    } catch (error) {
+        location.href = '404.html';
+    }
+});
+document.getElementById("_posts").addEventListener("click", function () 
+{
+    try {
+        _posts();
+    } catch (error) {
+        location.href = '404.html';
+    }
+});
+function newInfo(){
+    fetch(url + "/me", {
+        method: 'PUT',
+        headers: {
+            "Content-type" : "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "User-Agent" : "telran",
+            "ngrok-skip-browser-warning": "69420",
+            "x-access-token" : localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            "avatar": "https://gravatar.com/avatar/5c1ddf8d888a30c80f8103d4e2501b81?s=400&d=robohash&r=x",
+            "age": "36",
+            "bio": "Am student in Tel-Ran",
+            "fullName": "Aleksandr Nosov"
+        })
+    }).then (data => data.json())
+    .then(data => {
+        console.log("ID is: ", data._id);
+        console.log("Name is: ", data.username);
+        console.log("Age is: ", data.age);
+        console.log("Avatar is: ", data.avatar);
+    });
+}
+(function (){
+    requests.prototype.get(`${url}/me`, showMe);
+    requests.prototype.get(`${url}/posts`, postShow);
+}())
+async function logOut()
+{
+    await fetch(url + "/destroy-session",
+    {
+        method: 'POST',
+        headers:
+        {
+            "Content-type" : "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "User-Agent" : "telran",
+            "ngrok-skip-browser-warning": "69420",
+            "x-access-token" : localStorage.getItem("token")
+        }
+    }).then((data) => {
+        localStorage.clear();
+    })
+
+}
+async function deleteAccount(){
+    await fetch(url + "/me",{
+        method: 'DELETE',
+        headers: {
+            "Content-type" : "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "User-Agent" : "telran",
+            "ngrok-skip-browser-warning": "69420",
+            "x-access-token" : localStorage.getItem("token")
+        }
+    }
+    ).then((data) => {
+        localStorage.clear();
+    })
+}
+function _posts(){
+    fetch(url + "/post", {
+        method: 'POST',
+        headers: _headers,
+        body: JSON.stringify({
+            "title": "Post 9",
+            "description": "post about something",
+            "status": "active",
+            "image": "https://gravatar.com/avatar/b26c0003d0c13d0176f4465d6c94ea49?s=400&d=robohash&r=x"
+        })
+    }).then((data) => {
+
+    })
+}
+    </script>
+</body>
+</html>
